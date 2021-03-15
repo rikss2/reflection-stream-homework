@@ -5,73 +5,79 @@ import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
+import java.util.stream.Stream;
 
+/**
+ * @noinspection unused
+ */
 public class Homework1 {
 
     /**
      * Prints the declared methods of java.lang.String sorted by name.
      */
     public void streamPipeline1() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).sorted(Comparator.comparing(java.lang.reflect.Method::getName)).forEach(System.out::println);
     }
 
     /**
-     *  Prints all distinct names of the declared methods of java.lang.String sorted alphabetically.
+     * Prints all distinct names of the declared methods of java.lang.String sorted alphabetically.
      */
     public void streamPipeline2() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).map(java.lang.reflect.Method::getName).distinct().sorted().forEach(System.out::println);
     }
 
     /**
      * Prints the declared methods of java.lang.String with two or more parameters whose parameters are all of the same type, sorted by name.
      */
     public void streamPipeline3() {
-        // TODO
+        Stream.of(java.lang.String.class.getDeclaredMethods()).filter(method -> {
+            var parameters = method.getGenericParameterTypes();
+            return parameters.length > 1 && Stream.of(parameters).distinct().count() == 1;
+        }).sorted(Comparator.comparing(java.lang.reflect.Method::getName)).forEach(System.out::println);
     }
 
     /**
      * Prints all distinct return types of the declared methods of java.lang.String sorted alphabetically.
      */
     public void streamPipeline4() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).map(java.lang.reflect.Method::getGenericReturnType).map(java.lang.reflect.Type::getTypeName).distinct().sorted(Comparator.comparing(t -> t.toString())).forEach(System.out::println);
     }
 
     /**
      * Prints the declared methods of java.lang.String with at least one boolean parameter, sorted by name.
      */
     public void streamPipeline5() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).filter(method -> Stream.of(method.getGenericParameterTypes()).map(java.lang.reflect.Type::getTypeName).anyMatch(type -> type.equals("boolean"))).map(java.lang.reflect.Method::getName).sorted().forEach(System.out::println);
     }
 
     /**
      * Prints the declared methods of java.lang.String whose parameters are all of type int, sorted by name.
      */
     public void streamPipeline6() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).filter(method -> {
+            var parameters = method.getGenericParameterTypes();
+            return Stream.of(parameters).count()>0 && Stream.of(parameters).map(java.lang.reflect.Type::getTypeName).allMatch(type -> type.equals("int"));}).sorted(Comparator.comparing(java.lang.reflect.Method::getName)).forEach(System.out::println);
     }
 
     /**
      * Returns the longest name of the declared methods of java.lang.String.
      */
     public String streamPipeline7() {
-        // TODO
-        return null;
+        return Stream.of(String.class.getDeclaredMethods()).map(java.lang.reflect.Method::getName).max(Comparator.comparingInt(String::length)).get();
     }
 
     /**
-     *  Returns the longest one from the names of the public declared methods of java.lang.String.
+     * Returns the longest one from the names of the public declared methods of java.lang.String.
      */
     public String streamPipeline8() {
-        // TODO
-        return null;
+        return Stream.of(String.class.getDeclaredMethods()).filter(method -> method.getModifiers() % 2 == 1).map(java.lang.reflect.Method::getName).max(Comparator.comparingInt(String::length)).get();
     }
 
     /**
      * Returns summary statistics about the number of parameters for the declared methods of java.lang.String.
      */
     public IntSummaryStatistics streamPipeline9() {
-        // TODO
-        return null;
+        return  Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters->parameters.length).summaryStatistics();
     }
 
     /**
