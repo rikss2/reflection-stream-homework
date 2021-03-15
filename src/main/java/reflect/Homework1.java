@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -56,7 +57,8 @@ public class Homework1 {
     public void streamPipeline6() {
         Stream.of(String.class.getDeclaredMethods()).filter(method -> {
             var parameters = method.getGenericParameterTypes();
-            return Stream.of(parameters).count()>0 && Stream.of(parameters).map(java.lang.reflect.Type::getTypeName).allMatch(type -> type.equals("int"));}).sorted(Comparator.comparing(java.lang.reflect.Method::getName)).forEach(System.out::println);
+            return Stream.of(parameters).count() > 0 && Stream.of(parameters).map(java.lang.reflect.Type::getTypeName).allMatch(type -> type.equals("int"));
+        }).sorted(Comparator.comparing(java.lang.reflect.Method::getName)).forEach(System.out::println);
     }
 
     /**
@@ -77,7 +79,7 @@ public class Homework1 {
      * Returns summary statistics about the number of parameters for the declared methods of java.lang.String.
      */
     public IntSummaryStatistics streamPipeline9() {
-        return  Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters->parameters.length).summaryStatistics();
+        return Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters -> parameters.length).summaryStatistics();
     }
 
     /**
@@ -85,14 +87,14 @@ public class Homework1 {
      */
     public int streamPipeline10() {
 
-        return Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters->parameters.length).max().getAsInt();
+        return Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters -> parameters.length).max().getAsInt();
     }
 
     /**
      * Returns the declared method of java.lang.String with the most number of parameters.
      */
     public Method streamPipeline11() {
-        return Stream.of(String.class.getDeclaredMethods()).max(Comparator.comparingInt(method->method.getGenericParameterTypes().length)).get();
+        return Stream.of(String.class.getDeclaredMethods()).max(Comparator.comparingInt(method -> method.getGenericParameterTypes().length)).get();
         ;
     }
 
@@ -100,7 +102,6 @@ public class Homework1 {
      * Prints all distinct parameter types of the declared methods of java.lang.String sorted alphabetically.
      */
     public void streamPipeline12() {
-        Stream.of(String.class.getDeclaredMethods()).
+        Stream.of(String.class.getDeclaredMethods()).map(methods -> methods.getGenericParameterTypes()).flatMap(Stream::of).map(java.lang.reflect.Type::getTypeName).distinct().sorted(Comparator.comparing(t -> t.toString())).forEach(System.out::println);
     }
-
 }
