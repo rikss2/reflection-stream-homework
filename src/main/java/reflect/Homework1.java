@@ -84,23 +84,23 @@ public class Homework1 {
      * Returns the maximum number of parameters accepted by the declared methods of java.lang.String.
      */
     public int streamPipeline10() {
-        // TODO
-        return 0;
+
+        return Stream.of(String.class.getDeclaredMethods()).map(method -> method.getGenericParameterTypes()).mapToInt(parameters->parameters.length).max().getAsInt();
     }
 
     /**
      * Returns the declared method of java.lang.String with the most number of parameters.
      */
     public Method streamPipeline11() {
-        // TODO
-        return null;
+        return Stream.of(String.class.getDeclaredMethods()).max(Comparator.comparingInt(method->method.getGenericParameterTypes().length)).get();
+        ;
     }
 
     /**
      * Prints all distinct parameter types of the declared methods of java.lang.String sorted alphabetically.
      */
     public void streamPipeline12() {
-        // TODO
+        Stream.of(String.class.getDeclaredMethods()).
     }
 
 }
